@@ -2,14 +2,13 @@ name: Continuous BMS Checker
 
 on:
   schedule:
-    # Triggers at minute 0 past every 6th hour (4 times a day)
     - cron: '0 */6 * * *'
   workflow_dispatch:  
 
 jobs:
   check-tickets:
     runs-on: ubuntu-latest
-    timeout-minutes: 360 # Maximum 6-hour runner limit
+    timeout-minutes: 360
     permissions:
       contents: write
 
@@ -22,8 +21,36 @@ jobs:
         with:
           python-version: '3.14'
 
+      # Install and configure Cloudflare WARP in proxy-only mode
+      - name: Install & Configure Cloudflare WARP
+        run: |
+          # 1. Add Cloudflare gpg key and repository
+          curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-warp.list
+          
+          # 2. Install warp client
+          sudo apt-get update && sudo apt-get install cloudflare-warp -y
+          
+          # 3. Start the warp service system daemon
+          sudo systemctl start warp-svc
+          
+          # 4. Configure warp-cli to proxy mode only (SOCKS5 on 127.0.0.1:40000)
+          # A short sleep ensures the background daemon is fully initialized first
+          sleep 2
+          warp-cli registration register --accept-tos
+          warp-cli mode proxy
+          warp-cli connect
+          
+          # 5. Verify the proxy is working and shows a Cloudflare IP
+          sleep 3
+          echo "Verifying WARP Proxy IP exit node:"
+          curl -x socks5h://127.0.0.1:40000 https://1.1.1.1/cdn-cgi/trace | grep ip
+
       - name: Install dependencies
-        run: uv sync --frozen
+        # Added pysocks dynamically so requests can handle socks5h:// URLs
+        run: |
+          uv sync --frozen
+          uv add pysocks
 
       - name: Run checker
         env:
@@ -34,7 +61,6 @@ jobs:
         run: uv run main.py
 
       - name: Commit updated state
-        # Ensures state saves even if the script gracefully exits
         if: always() 
         run: |
           git config user.name "github-actions[bot]"

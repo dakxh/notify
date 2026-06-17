@@ -37,7 +37,7 @@ jobs:
           # 4. Configure warp-cli to proxy mode only (SOCKS5 on 127.0.0.1:40000)
           # A short sleep ensures the background daemon is fully initialized first
           sleep 2
-          warp-cli registration register --accept-tos
+          warp-cli --accept-tos registration new
           warp-cli mode proxy
           warp-cli connect
           

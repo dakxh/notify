@@ -1,9 +1,7 @@
 """
-BMS Ticket Checker — CI/Headless mode for GitHub Actions.
-Runs once, checks all configured watches, emails on changes.
-State is persisted via a JSON artifact.
-
-Configure via environment variables or edit the CONFIG below.
+BMS Ticket Checker — Persistent Loop Mode for GitHub Actions.
+State is persisted via a JSON artifact. Tracks and alerts via ntfy.sh.
+Routes API requests through local Cloudflare WARP proxy.
 """
 
 import os
@@ -11,7 +9,6 @@ import re
 import sys
 import json
 import time
-from html import escape
 from datetime import datetime
 from dataclasses import dataclass, field
 from urllib.parse import urlparse
@@ -21,16 +18,15 @@ import requests
 # CONFIGURATION — edit these or set via env vars
 # ──────────────────────────────────────────────────────────────────────
 CONFIG = {
-    "url": os.getenv("BMS_URL", ""),
-    "dates": os.getenv("BMS_DATES", ""),          
-    "theatre": os.getenv("BMS_THEATRE", ""),       
-    "time_period": os.getenv("BMS_TIME", ""),      
-    "ntfy_topic": os.getenv("NTFY_TOPIC", "")
+    "url": os.getenv(
+        "BMS_URL",
+        "https://in.bookmyshow.com/movies/hyderabad/spider-man-brand-new-day/buytickets/ET00502600"
+    ),
+    "dates": os.getenv("BMS_DATES", ""),          # comma-separated YYYYMMDD, empty = from URL
+    "theatre": os.getenv("BMS_THEATRE", ""),       # substring filter, empty = all
+    "time_period": os.getenv("BMS_TIME", ""),      # e.g. "evening,night", empty = all
+    "ntfy_topic": os.getenv("NTFY_TOPIC", ""),     # Your custom ntfy topic
 }
-
-RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
-RESEND_TO_EMAIL = os.getenv("RESEND_TO_EMAIL", "")
-RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", "aviiciii@resend.dev")
 
 STATE_FILE = "bms_state.json"
 
@@ -71,7 +67,7 @@ REGION_MAP = {
 }
 
 
-# ─────────────────────────────────────���────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────
 # DATA
 # ──────────────────────────────────────────────────────────────────────
 @dataclass
@@ -132,8 +128,7 @@ API_URL = (
 )
 
 
-def fetch_bms(event_code, date_code, region_code, region_slug,
-              lat, lon, geohash):
+def fetch_bms(event_code, date_code, region_code, region_slug, lat, lon, geohash):
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -167,13 +162,14 @@ def fetch_bms(event_code, date_code, region_code, region_slug,
         "memberId": "", "lsId": "", "subCode": "",
         "lat": lat, "lon": lon,
     }
+    
+    # Route through the local Cloudflare WARP SOCKS5 proxy
     proxies = {
         "http": "socks5h://127.0.0.1:40000",
         "https": "socks5h://127.0.0.1:40000"
     }
 
     try:
-        # Pass the proxies dictionary into the requests call
         resp = requests.get(
             API_URL, 
             headers=headers, 
@@ -266,7 +262,6 @@ def parse_shows(data):
                     )
                     for cat in sa.get("categories", []):
                         ca = str(cat.get("availStatus", ""))
-                        lbl, _ = AVAIL_STATUS_MAP.get(ca, ("UNKNOWN", ""))
                         show.categories.append(CatInfo(
                             name=cat.get("priceDesc", ""),
                             price=cat.get("curPrice", "0"),
@@ -289,17 +284,14 @@ def filter_shows(shows, theatre_filter, time_periods, date_codes):
                     if d.strip()) if date_codes else set()
 
     for s in shows:
-        # Theatre filter
         if kws:
             name_lower = s.venue_name.lower()
             if not any(k in name_lower for k in kws):
                 continue
 
-        # Date filter
         if dates_set and s.date_code and s.date_code not in dates_set:
             continue
 
-        # Time period filter
         if periods:
             try:
                 tc = int(s.time_code)
@@ -336,7 +328,6 @@ def save_state(state):
 
 
 def build_state(shows, dates):
-    """Build a comparable state dict."""
     show_state = {}
     for s in shows:
         for c in s.categories:
@@ -360,7 +351,6 @@ def build_state(shows, dates):
 def detect_changes(old_state, new_state):
     changes = []
 
-    # New dates opening
     old_dates = old_state.get("dates", {})
     new_dates = new_state.get("dates", {})
     for dc, status in new_dates.items():
@@ -372,7 +362,6 @@ def detect_changes(old_state, new_state):
     old_shows = old_state.get("shows", {})
     new_shows = new_state.get("shows", {})
 
-    # New showtimes
     for key in set(new_shows) - set(old_shows):
         s = new_shows[key]
         changes.append(
@@ -380,7 +369,6 @@ def detect_changes(old_state, new_state):
             f"— {s['cat']} ₹{s['price']}"
         )
 
-    # Sold out → available
     for key, new_s in new_shows.items():
         old_s = old_shows.get(key)
         if old_s and old_s["status"] == "0" and new_s["status"] != "0":
@@ -393,6 +381,7 @@ def detect_changes(old_state, new_state):
             )
 
     return changes
+
 
 # ──────────────────────────────────────────────────────────────────────
 # NOTIFICATION (ntfy.sh)
@@ -454,7 +443,7 @@ def main():
     print(f"  Event: {event_code} | Target Date: {date_list}")
     
     start_time = time.time()
-    # Exactly 5 hours and 55 minutes
+    # Exactly 5 hours and 55 minutes runner limit protection
     max_duration = (5 * 3600) + (55 * 60) 
 
     while (time.time() - start_time) < max_duration:
@@ -497,11 +486,12 @@ def main():
         except Exception as e:
             print(f"[{now_str}] ❌ Error during execution: {e}")
         
-        # Flush stdout explicitly just in case
+        # Flush stdout explicitly to ensure GitHub Actions live logs update immediately
         sys.stdout.flush() 
         time.sleep(30)
         
     print("🛑 Reached 5h 55m limit. Exiting cleanly to trigger GitHub Action commit.")
+
 
 if __name__ == "__main__":
     main()

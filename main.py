@@ -397,7 +397,7 @@ def send_ntfy_alert(changes, movie_info):
 
     headers = {
         "Title": f"🎬 BMS Alert: {movie_name}",
-        "Priority": "high",
+        "Priority": "urgent",
         "Tags": "ticket,popcorn"
     }
 

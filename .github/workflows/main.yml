@@ -27,13 +27,10 @@ jobs:
 
       - name: Run checker
         env:
-          # Forces immediate log output in GitHub Actions
           PYTHONUNBUFFERED: 1 
           NTFY_TOPIC: ${{ vars.NTFY_TOPIC }}
           BMS_URL: ${{ vars.BMS_URL }}
           BMS_DATES: ${{ vars.BMS_DATES }}
-          BMS_THEATRE: ${{ vars.BMS_THEATRE }}
-          BMS_TIME: ${{ vars.BMS_TIME }}
         run: uv run main.py
 
       - name: Commit updated state

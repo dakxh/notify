@@ -169,15 +169,26 @@ def fetch_bms(event_code, date_code, region_code, region_slug,
         "memberId": "", "lsId": "", "subCode": "",
         "lat": lat, "lon": lon,
     }
+    proxies = {
+        "http": "socks5h://127.0.0.1:40000",
+        "https": "socks5h://127.0.0.1:40000"
+    }
+
     try:
-        resp = requests.get(API_URL, headers=headers, params=params, timeout=15)
+        # Pass the proxies dictionary into the requests call
+        resp = requests.get(
+            API_URL, 
+            headers=headers, 
+            params=params, 
+            proxies=proxies, 
+            timeout=15
+        )
         now_log = datetime.now().strftime("%H:%M:%S")
-        
-        # Log every scrape attempt with status code
         print(f"[{now_log}] Scrape [{date_code or 'URL'}]: HTTP {resp.status_code}")
         
         if resp.status_code == 200:
             return resp.json()
+            
     except requests.RequestException as e:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Scrape Failed: {e}")
     return None

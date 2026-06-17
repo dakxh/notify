@@ -38,8 +38,8 @@ jobs:
           # A short sleep ensures the background daemon is fully initialized first
           sleep 2
           warp-cli --accept-tos registration new
-          warp-cli mode proxy
-          warp-cli connect
+          warp-cli --accept-tos mode proxy
+          warp-cli --accept-tos connect
           
           # 5. Verify the proxy is working and shows a Cloudflare IP
           sleep 3

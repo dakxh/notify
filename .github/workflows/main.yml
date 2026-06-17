@@ -1,0 +1,46 @@
+name: Continuous BMS Checker
+
+on:
+  schedule:
+    # Triggers at minute 0 past every 6th hour (4 times a day)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  
+
+jobs:
+  check-tickets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360 # Maximum 6-hour runner limit
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Run checker
+        env:
+          # Forces immediate log output in GitHub Actions
+          PYTHONUNBUFFERED: 1 
+          NTFY_TOPIC: ${{ vars.NTFY_TOPIC }}
+          BMS_URL: ${{ vars.BMS_URL }}
+          BMS_DATES: ${{ vars.BMS_DATES }}
+          BMS_THEATRE: ${{ vars.BMS_THEATRE }}
+          BMS_TIME: ${{ vars.BMS_TIME }}
+        run: uv run main.py
+
+      - name: Commit updated state
+        # Ensures state saves even if the script gracefully exits
+        if: always() 
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bms_state.json
+          git diff --cached --quiet || (git commit -m "chore: update bms_state.json [skip ci]" && git push)

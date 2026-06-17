@@ -170,9 +170,10 @@ def fetch_bms(event_code, date_code, region_code, region_slug,
     }
     try:
         resp = requests.get(API_URL, headers=headers, params=params, timeout=15)
-        # Force the log to print the status code with a timestamp
         now_log = datetime.now().strftime("%H:%M:%S")
-        print(f"[{now_log}] Scrape [{date_code}]: HTTP {resp.status_code}")
+        
+        # Log every scrape attempt with status code
+        print(f"[{now_log}] Scrape [{date_code or 'URL'}]: HTTP {resp.status_code}")
         
         if resp.status_code == 200:
             return resp.json()
@@ -546,13 +547,12 @@ def main():
     else:
         date_list = [""]
 
-    print("🚀 Starting BMS Monitor on GitHub Actions")
-    print(f"  Event: {event_code} | Region: {region_code} | Target Date: {date_list}")
-    print(f"  ntfy Topic: {CONFIG['ntfy_topic']}")
+    print("🚀 Starting 5h 55m BMS Monitor on GitHub Actions")
+    print(f"  Event: {event_code} | Target Date: {date_list}")
     
     start_time = time.time()
-    # 5 hours and 50 minutes (gives the runner time to safely exit and commit the JSON)
-    max_duration = (5 * 3600) + (50 * 60) 
+    # Exactly 5 hours and 55 minutes
+    max_duration = (5 * 3600) + (55 * 60) 
 
     while (time.time() - start_time) < max_duration:
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -572,7 +572,7 @@ def main():
                 all_shows.extend(parse_shows(data))
 
             if not all_shows:
-                print(f"[{now_str}] ⚠️ No showtimes found. Retrying in 30s...")
+                pass # Suppress noisy "No showtimes found" logs if dates aren't open yet
             else:
                 filtered = filter_shows(all_shows, CONFIG["theatre"], CONFIG["time_period"], CONFIG["dates"])
                 
@@ -586,21 +586,19 @@ def main():
                 save_state(new_state)
 
                 if changes:
-                    print(f"[{now_str}] ⚡ {len(changes)} change(s) detected:")
+                    print(f"\n[{now_str}] ⚡ {len(changes)} change(s) detected:")
                     for c in changes:
                         print(f"     {c}")
                     send_ntfy_alert(changes, movie_info)
-                else:
-                    print(f"[{now_str}] ✅ No changes. Tracking {len(filtered)} shows.")
 
         except Exception as e:
             print(f"[{now_str}] ❌ Error during execution: {e}")
         
-        # Flush stdout so GitHub Actions live logs update immediately without buffering
+        # Flush stdout explicitly just in case
         sys.stdout.flush() 
         time.sleep(30)
         
-    print("🛑 Approaching 6-hour runner limit. Exiting gracefully to save state.")
+    print("🛑 Reached 5h 55m limit. Exiting cleanly to trigger GitHub Action commit.")
 
 if __name__ == "__main__":
     main()

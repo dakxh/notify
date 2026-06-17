@@ -169,13 +169,15 @@ def fetch_bms(event_code, date_code, region_code, region_slug,
         "lat": lat, "lon": lon,
     }
     try:
-        resp = requests.get(API_URL, headers=headers,
-                            params=params, timeout=15)
+        resp = requests.get(API_URL, headers=headers, params=params, timeout=15)
+        # Force the log to print the status code with a timestamp
+        now_log = datetime.now().strftime("%H:%M:%S")
+        print(f"[{now_log}] Scrape [{date_code}]: HTTP {resp.status_code}")
+        
         if resp.status_code == 200:
             return resp.json()
-        print(f"  HTTP {resp.status_code}")
     except requests.RequestException as e:
-        print(f"  Request failed: {e}")
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] Scrape Failed: {e}")
     return None
 
 
@@ -525,10 +527,6 @@ def send_email(subject, changes, shows, movie_info):
 # MAIN
 # ──────────────────────────────────────────────────────────────────────
 def main():
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{now_str}] BMS Ticket Checker — CI mode")
-
-    # Parse config
     parsed = parse_bms_url(CONFIG["url"])
     event_code = parsed["event_code"]
     region_slug = parsed["region_slug"]
@@ -538,11 +536,8 @@ def main():
         print("  ❌ Invalid BMS_URL. Could not extract event/region.")
         sys.exit(1)
 
-    region_code, region_slug_r, lat, lon, geohash = resolve_region(
-        region_slug
-    )
+    region_code, region_slug_r, lat, lon, geohash = resolve_region(region_slug)
 
-    # Determine dates to check
     raw_dates = CONFIG["dates"].strip()
     if raw_dates:
         date_list = [d.strip() for d in raw_dates.split(",") if d.strip()]
@@ -551,75 +546,61 @@ def main():
     else:
         date_list = [""]
 
-    print(f"  Event: {event_code}  Region: {region_code}  "
-          f"Dates: {date_list}")
+    print("🚀 Starting BMS Monitor on GitHub Actions")
+    print(f"  Event: {event_code} | Region: {region_code} | Target Date: {date_list}")
+    print(f"  ntfy Topic: {CONFIG['ntfy_topic']}")
+    
+    start_time = time.time()
+    # 5 hours and 50 minutes (gives the runner time to safely exit and commit the JSON)
+    max_duration = (5 * 3600) + (50 * 60) 
 
-    # Fetch data for each date
-    all_shows = []
-    all_dates = []
-    movie_info = {"name": "Unknown", "language": ""}
+    while (time.time() - start_time) < max_duration:
+        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        all_shows, all_dates = [], []
+        movie_info = {"name": "Unknown", "language": ""}
 
-    for dc in date_list:
-        data = fetch_bms(event_code, dc, region_code,
-                         region_slug_r, lat, lon, geohash)
-        if not data:
-            print(f"  ⚠️  No data for date {dc or '(default)'}")
-            continue
+        try:
+            for dc in date_list:
+                data = fetch_bms(event_code, dc, region_code, region_slug_r, lat, lon, geohash)
+                if not data:
+                    continue
 
-        if movie_info["name"] == "Unknown":
-            movie_info = parse_movie_info(data)
+                if movie_info["name"] == "Unknown":
+                    movie_info = parse_movie_info(data)
 
-        all_dates.extend(parse_dates(data))
-        all_shows.extend(parse_shows(data))
+                all_dates.extend(parse_dates(data))
+                all_shows.extend(parse_shows(data))
 
-    if not all_shows:
-        print("  ❌ No showtimes found.")
-        sys.exit(0)
+            if not all_shows:
+                print(f"[{now_str}] ⚠️ No showtimes found. Retrying in 30s...")
+            else:
+                filtered = filter_shows(all_shows, CONFIG["theatre"], CONFIG["time_period"], CONFIG["dates"])
+                
+                new_state = build_state(filtered, all_dates)
+                old_state = load_state()
 
-    print(f"  🎬 {movie_info['name']}  {movie_info['language']}")
+                changes = []
+                if old_state:
+                    changes = detect_changes(old_state, new_state)
 
-    # Apply filters
-    filtered = filter_shows(
-        all_shows,
-        CONFIG["theatre"],
-        CONFIG["time_period"],
-        CONFIG["dates"],
-    )
-    print(f"  📊 {len(filtered)} showtime(s) after filters")
+                save_state(new_state)
 
-    # Build state & detect changes
-    new_state = build_state(filtered, all_dates)
-    old_state = load_state()
+                if changes:
+                    print(f"[{now_str}] ⚡ {len(changes)} change(s) detected:")
+                    for c in changes:
+                        print(f"     {c}")
+                    send_ntfy_alert(changes, movie_info)
+                else:
+                    print(f"[{now_str}] ✅ No changes. Tracking {len(filtered)} shows.")
 
-    changes = []
-    if old_state:
-        changes = detect_changes(old_state, new_state)
-
-    save_state(new_state)
-
-    if changes:
-        print(f"\n  ⚡ {len(changes)} change(s) detected:")
-        for c in changes:
-            print(f"     {c}")
-        send_email(
-            f"BMS Alert: {movie_info['name']} - {len(changes)} change(s)",
-            changes, filtered, movie_info,
-        )
-    else:
-        print("  ✅ No changes since last check.")
-
-    # Print current status
-    print(f"\n  Current status ({len(filtered)} shows):")
-    for s in filtered:
-        cats = ", ".join(
-            f"{c.name}=₹{c.price}({AVAIL_STATUS_MAP.get(c.status, ('?',''))[0]})"
-            for c in s.categories
-        )
-        fmt = f"|{s.screen_attr}" if s.screen_attr else ""
-        print(f"    {s.venue_name} — {s.time}{fmt} [{s.date_code}] — {cats}")
-
-    print("\n  Done.")
-
+        except Exception as e:
+            print(f"[{now_str}] ❌ Error during execution: {e}")
+        
+        # Flush stdout so GitHub Actions live logs update immediately without buffering
+        sys.stdout.flush() 
+        time.sleep(30)
+        
+    print("🛑 Approaching 6-hour runner limit. Exiting gracefully to save state.")
 
 if __name__ == "__main__":
     main()

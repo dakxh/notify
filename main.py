@@ -396,6 +396,38 @@ def detect_changes(old_state, new_state):
 
     return changes
 
+# ──────────────────────────────────────────────────────────────────────
+# NOTIFICATION (ntfy.sh)
+# ──────────────────────────────────────────────────────────────────────
+def send_ntfy_alert(changes, movie_info):
+    topic = CONFIG["ntfy_topic"].strip()
+    if not topic:
+        print("  ⚠️  Skipping ntfy — NTFY_TOPIC not set.")
+        return
+
+    movie_name = movie_info.get("name", "Movie")
+    message = "\n".join(changes)
+
+    headers = {
+        "Title": f"🎬 BMS Alert: {movie_name}",
+        "Priority": "high",
+        "Tags": "ticket,popcorn"
+    }
+
+    try:
+        resp = requests.post(
+            f"https://ntfy.sh/{topic}",
+            data=message.encode('utf-8'),
+            headers=headers,
+            timeout=10
+        )
+        if resp.status_code == 200:
+            print(f"  ✅ Push notification sent to ntfy.sh/{topic}")
+        else:
+            print(f"  ❌ ntfy failed [{resp.status_code}]: {resp.text}")
+    except requests.RequestException as e:
+        print(f"  ❌ ntfy error: {e}")
+
 
 # ──────────────────────────────────────────────────────────────────────
 # EMAIL NOTIFICATION (Resend)

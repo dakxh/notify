@@ -9,6 +9,7 @@ import re
 import sys
 import json
 import time
+import threading
 from datetime import datetime
 from dataclasses import dataclass, field
 from urllib.parse import urlparse
@@ -386,6 +387,26 @@ def detect_changes(old_state, new_state):
 # ──────────────────────────────────────────────────────────────────────
 # NOTIFICATION (ntfy.sh)
 # ──────────────────────────────────────────────────────────────────────
+def _ntfy_worker(topic, message, headers):
+    """Background worker that sends the notification 10 times, 1 minute apart."""
+    for i in range(10):
+        try:
+            resp = requests.post(
+                f"https://ntfy.sh/{topic}",
+                data=message.encode('utf-8'),
+                headers=headers,
+                timeout=10
+            )
+            if resp.status_code == 200:
+                print(f"  ✅ [Thread] Push {i+1}/10 sent to ntfy.sh/{topic}")
+            else:
+                print(f"  ❌ [Thread] ntfy failed [{resp.status_code}]: {resp.text}")
+        except requests.RequestException as e:
+            print(f"  ❌ [Thread] ntfy error: {e}")
+        
+        if i < 9:
+            time.sleep(60)
+
 def send_ntfy_alert(changes, movie_info):
     topic = CONFIG["ntfy_topic"].strip()
     if not topic:
@@ -401,19 +422,15 @@ def send_ntfy_alert(changes, movie_info):
         "Tags": "ticket,popcorn"
     }
 
-    try:
-        resp = requests.post(
-            f"https://ntfy.sh/{topic}",
-            data=message.encode('utf-8'),
-            headers=headers,
-            timeout=10
-        )
-        if resp.status_code == 200:
-            print(f"  ✅ Push notification sent to ntfy.sh/{topic}")
-        else:
-            print(f"  ❌ ntfy failed [{resp.status_code}]: {resp.text}")
-    except requests.RequestException as e:
-        print(f"  ❌ ntfy error: {e}")
+    print("  🚀 Spawning background thread for 10-minute notification sequence...")
+    # Spawn the background worker as a daemon thread
+    thread = threading.Thread(
+        target=_ntfy_worker,
+        args=(topic, message, headers),
+        daemon=True
+    )
+    thread.start()
+
 
 
 # ──────────────────────────────────────────────────────────────────────

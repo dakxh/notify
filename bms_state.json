@@ -256,19 +256,19 @@
       "price": "345.00",
       "status": "0"
     },
-    "ILKS|6779|20260730|RECLINER ROWS": {
-      "venue": "PVR Lakeshore PXL 4K Laser ATMOS DTS-X Y Junction",
-      "time": "08:00 PM",
-      "date": "20260730",
-      "cat": "RECLINER ROWS",
-      "price": "404.00",
-      "status": "0"
-    },
     "ILKS|6779|20260730|LOUNGER ROWS": {
       "venue": "PVR Lakeshore PXL 4K Laser ATMOS DTS-X Y Junction",
       "time": "08:00 PM",
       "date": "20260730",
       "cat": "LOUNGER ROWS",
+      "price": "404.00",
+      "status": "0"
+    },
+    "ILKS|6779|20260730|RECLINER ROWS": {
+      "venue": "PVR Lakeshore PXL 4K Laser ATMOS DTS-X Y Junction",
+      "time": "08:00 PM",
+      "date": "20260730",
+      "cat": "RECLINER ROWS",
       "price": "404.00",
       "status": "0"
     },

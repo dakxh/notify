@@ -9,6 +9,7 @@ import re
 import sys
 import json
 import time
+import subprocess
 import threading
 from datetime import datetime
 from dataclasses import dataclass, field
@@ -385,6 +386,35 @@ def detect_changes(old_state, new_state):
 
 
 # ──────────────────────────────────────────────────────────────────────
+# GIT SYNC
+# ──────────────────────────────────────────────────────────────────────
+def push_state_to_repo():
+    print("  🔄 [Git] Attempting to push updated state to repository...")
+    try:
+        # 1. Configure the bot identity (required if not set by checkout action)
+        subprocess.run(["git", "config", "--local", "user.name", "github-actions[bot]"], check=True, capture_output=True)
+        subprocess.run(["git", "config", "--local", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True, capture_output=True)
+        
+        # 2. Stage the file
+        subprocess.run(["git", "add", STATE_FILE], check=True, capture_output=True)
+        
+        # 3. Check if there is actually a diff to commit
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        if STATE_FILE in status.stdout:
+            # 4. Commit with [skip ci] to prevent infinite workflow loops
+            subprocess.run(["git", "commit", "-m", "chore: sync live bms state 🤖 [skip ci]"], check=True, capture_output=True)
+            
+            # 5. Push to the current branch
+            subprocess.run(["git", "push"], check=True, capture_output=True)
+            print("  ✅ [Git] Successfully pushed bms_state.json to origin.")
+        else:
+            print("  ℹ️ [Git] State file unchanged, nothing to commit.")
+
+    except subprocess.CalledProcessError as e:
+        print(f"  ❌ [Git] Push failed. Exit code: {e.returncode}")
+        if e.stderr:
+            print(f"     Error output: {e.stderr.decode('utf-8').strip()}")
+# ──────────────────────────────────────────────────────────────────────
 # NOTIFICATION (ntfy.sh)
 # ──────────────────────────────────────────────────────────────────────
 def _ntfy_worker(topic, message, headers):
@@ -405,7 +435,7 @@ def _ntfy_worker(topic, message, headers):
             print(f"  ❌ [Thread] ntfy error: {e}")
         
         if i < 9:
-            time.sleep(60)
+            time.sleep(20)
 
 def send_ntfy_alert(changes, movie_info):
     topic = CONFIG["ntfy_topic"].strip()
@@ -417,7 +447,7 @@ def send_ntfy_alert(changes, movie_info):
     message = "\n".join(changes)
 
     headers = {
-        "Title": f"🎬 BMS Alert: {movie_name}",
+        "Title": f"🎬 BMS Alert: {movie_name}".encode('utf-8'),
         "Priority": "urgent",
         "Tags": "ticket,popcorn"
     }
@@ -430,7 +460,6 @@ def send_ntfy_alert(changes, movie_info):
         daemon=True
     )
     thread.start()
-
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -459,6 +488,17 @@ def main():
     print("🚀 Starting 5h 55m BMS Monitor on GitHub Actions")
     print(f"  Event: {event_code} | Target Date: {date_list}")
     
+    # ────────────────────────────────────────────────────────────
+    # PHASE 1: HYDRATE INITIAL STATE (Eager Evaluation)
+    # ────────────────────────────────────────────────────────────
+    print("💾 Loading initial state from disk...")
+    current_state = load_state()
+    if not current_state:
+        print("  ℹ️ No existing state found. Proceeding with cold start (all scraped shows treated as NEW).")
+    else:
+        num_shows = len(current_state.get('shows', {}))
+        print(f"  ✅ Loaded existing state with {num_shows} tracked shows.")
+        
     start_time = time.time()
     # Exactly 5 hours and 55 minutes runner limit protection
     max_duration = (5 * 3600) + (55 * 60) 
@@ -485,14 +525,13 @@ def main():
             else:
                 filtered = filter_shows(all_shows, CONFIG["theatre"], CONFIG["time_period"], CONFIG["dates"])
                 
+                # Build the state for this exact moment
                 new_state = build_state(filtered, all_dates)
-                old_state = load_state()
 
-                changes = []
-                if old_state:
-                    changes = detect_changes(old_state, new_state)
-
-                save_state(new_state)
+                # ────────────────────────────────────────────────────────────
+                # PHASE 2: IMMEDIATE COMPARISON & ALERT
+                # ────────────────────────────────────────────────────────────
+                changes = detect_changes(current_state, new_state)
 
                 if changes:
                     print(f"\n[{now_str}] ⚡ {len(changes)} change(s) detected:")
@@ -500,6 +539,17 @@ def main():
                         print(f"     {c}")
                     send_ntfy_alert(changes, movie_info)
 
+                # ────────────────────────────────────────────────────────────
+                # PHASE 3: SYNCHRONIZE STATE (Memory + Disk)
+                # ────────────────────────────────────────────────────────────
+                current_state = new_state
+                save_state(current_state)
+
+                # Force the push mid-loop only if changes were detected
+                if changes:
+                    push_state_to_repo()
+
+        
         except Exception as e:
             print(f"[{now_str}] ❌ Error during execution: {e}")
         

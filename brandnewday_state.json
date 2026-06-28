@@ -1,0 +1,22 @@
+{
+  "dimensions": {
+    "4DX 3D": "ET00502630",
+    "HDR By Barco": "ET00505091",
+    "3D": "ET00502600"
+  },
+  "venues": {
+    "4DX 3D": [
+      "PVR: Nexus Mall Kukatpally, Hyderabad",
+      "PVR: Irrum Manzil, Hyderabad",
+      "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad"
+    ],
+    "HDR By Barco": [
+      "AMB Cinemas: Gachibowli"
+    ],
+    "3D": [
+      "PVR Lakeshore PXL 4K Laser ATMOS DTS-X Y Junction",
+      "Cinepolis: TNR North City, Suchitra, Hyderabad",
+      "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad"
+    ]
+  }
+}

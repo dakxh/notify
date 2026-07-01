@@ -336,19 +336,19 @@
       "price": "758.00",
       "status": "0"
     },
-    "PIIC|29636|20260730|PRIME ROWS": {
-      "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
-      "time": "04:00 PM",
-      "date": "20260730",
-      "cat": "PRIME ROWS",
-      "price": "522.00",
-      "status": "0"
-    },
     "PIIC|29636|20260730|LOUNGERS ROWS": {
       "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
       "time": "04:00 PM",
       "date": "20260730",
       "cat": "LOUNGERS ROWS",
+      "price": "522.00",
+      "status": "0"
+    },
+    "PIIC|29636|20260730|PRIME ROWS": {
+      "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
+      "time": "04:00 PM",
+      "date": "20260730",
+      "cat": "PRIME ROWS",
       "price": "522.00",
       "status": "0"
     },
@@ -360,19 +360,19 @@
       "price": "758.00",
       "status": "0"
     },
-    "PIIC|29637|20260730|PRIME ROWS": {
-      "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
-      "time": "07:00 PM",
-      "date": "20260730",
-      "cat": "PRIME ROWS",
-      "price": "522.00",
-      "status": "0"
-    },
     "PIIC|29637|20260730|LOUNGERS ROWS": {
       "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
       "time": "07:00 PM",
       "date": "20260730",
       "cat": "LOUNGERS ROWS",
+      "price": "522.00",
+      "status": "0"
+    },
+    "PIIC|29637|20260730|PRIME ROWS": {
+      "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
+      "time": "07:00 PM",
+      "date": "20260730",
+      "cat": "PRIME ROWS",
       "price": "522.00",
       "status": "0"
     },
@@ -390,7 +390,7 @@
       "date": "20260730",
       "cat": "PRIME ROWS",
       "price": "522.00",
-      "status": "0"
+      "status": "1"
     },
     "PIIC|29638|20260730|LOUNGERS ROWS": {
       "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",

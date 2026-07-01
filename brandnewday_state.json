@@ -2,7 +2,8 @@
   "dimensions": {
     "4DX 3D": "ET00502630",
     "HDR By Barco": "ET00505091",
-    "3D": "ET00502600"
+    "3D": "ET00502600",
+    "EPIQ 3D": "ET00505581"
   },
   "venues": {
     "4DX 3D": [
@@ -18,6 +19,9 @@
       "Cinepolis: TNR North City, Suchitra, Hyderabad",
       "AAA Cinemas: Ameerpet",
       "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad"
+    ],
+    "EPIQ 3D": [
+      "ART CINEMAS: Vanasthalipuram"
     ]
   }
 }

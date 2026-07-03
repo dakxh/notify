@@ -14,7 +14,7 @@
       "date": "20260730",
       "cat": "3D GOLD",
       "price": "325.00",
-      "status": "2"
+      "status": "1"
     },
     "ACAS|35097|20260730|3D PLATINUM": {
       "venue": "AAA Cinemas: Ameerpet",
@@ -30,7 +30,7 @@
       "date": "20260730",
       "cat": "3D GOLD",
       "price": "325.00",
-      "status": "2"
+      "status": "1"
     },
     "ACAS|35098|20260730|3D PLATINUM": {
       "venue": "AAA Cinemas: Ameerpet",
@@ -384,19 +384,19 @@
       "price": "758.00",
       "status": "0"
     },
-    "PIIC|29638|20260730|PRIME ROWS": {
-      "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
-      "time": "10:00 PM",
-      "date": "20260730",
-      "cat": "PRIME ROWS",
-      "price": "522.00",
-      "status": "0"
-    },
     "PIIC|29638|20260730|LOUNGERS ROWS": {
       "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
       "time": "10:00 PM",
       "date": "20260730",
       "cat": "LOUNGERS ROWS",
+      "price": "522.00",
+      "status": "0"
+    },
+    "PIIC|29638|20260730|PRIME ROWS": {
+      "venue": "PVR Superplex Inorbit: LUXE, PXL, 4DX: Cyberabad",
+      "time": "10:00 PM",
+      "date": "20260730",
+      "cat": "PRIME ROWS",
       "price": "522.00",
       "status": "0"
     }

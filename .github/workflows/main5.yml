@@ -1,4 +1,4 @@
-name: new scraper
+name: bnd second 2
 
 on:
   workflow_dispatch:

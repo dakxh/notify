@@ -312,7 +312,7 @@ def main():
                         human_date = humanize_date(s_date)
                         
                         msg = (
-                            f"BND unblock at {rows_str} row. Date: {s_date}. Time: {s_time}. {newly_unblocked_count} seats unblocked.\n\n"
+                            f"BND unblock at {rows_str} row. Date: {s_date}. Time: {s_time}. {newly_unblocked_count} seats unblocked."
                             f"{rows_str} rows unblocked for #SpiderManBrandNewDay at Prasads PCX Screen.\n\n"
                             f"{human_date}, {s_time}"
                         )

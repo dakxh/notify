@@ -97,7 +97,7 @@ def save_state(state, commit_msg="Update seat state"):
 
 def trigger_ntfy(message):
     print(f"\n[!] ALERTING VIA NTFY: {message}")
-    for i in range(3):
+    for i in range(2):
         try:
             resp = requests.post(
                 "https://ntfy.sh/odssy_stlyt",
@@ -108,7 +108,7 @@ def trigger_ntfy(message):
             print(f"    -> Ntfy ping {i+1}/3 sent! Status: {resp.status_code}")
         except Exception as e:
             print(f"    -> Ntfy ping {i+1} failed: {e}")
-        if i < 2:
+        if i < 1:
             time.sleep(15)
 
 def toggle_warp():

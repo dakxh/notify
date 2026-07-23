@@ -253,7 +253,7 @@ def main():
         
         # 4. The requested 20-second wait before the next loop iteration begins
         print("\n⏳ Sleeping for 20 seconds before the next check...")
-        time.sleep(10)
+        time.sleep(20)
         
     print("\n🏁 Time limit reached (5h 55m). Gracefully shutting down.")
 

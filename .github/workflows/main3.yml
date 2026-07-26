@@ -1,4 +1,4 @@
-name: new scraper
+name: farthest date
 
 on:
   workflow_dispatch:

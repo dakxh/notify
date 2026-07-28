@@ -1,11 +1,12 @@
 {
   "known_movies": [
-    "Dhamaal 4",
-    "Spider-Man: Brand New Day",
-    "The Odyssey",
     "Srinivasa Mangapuram",
+    "Karmakhya",
     "Lenin",
+    "Spider-Man: Brand New Day",
     "Chennai Love Story",
+    "Dhamaal 4",
+    "The Odyssey",
     "Jana Nayagan"
   ],
   "known_sessions": {
@@ -765,6 +766,15 @@
       "format": "HDR By Barco English",
       "attribute": "PCX HDR by BARCO/BARCO 4K LASER",
       "datetime": "202608022335"
+    },
+    "254075": {
+      "movie": "Karmakhya",
+      "date": "20260730",
+      "time": "07:45 PM",
+      "screen": "SCREEN 5",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202607301945"
     }
   }
 }

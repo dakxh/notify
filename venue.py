@@ -24,14 +24,13 @@ PROXIES = {
 # EXACT HEADERS PROVIDED
 GET_HEADERS = {
     "Host": "in.bookmyshow.com",
+    "Content-Type": "application/json",
     "X-Latitude": "17.385044",
     "X-Subregion-Code": "HYD",
     "X-App-Code": "MOBAND2",
     "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 10; Android SDK built for x86_64 Build/QSR1.211112.011)",
-    "X-Longitude": "78.48667",
-    "X-Region-Code": "HYD",
-    "X-Platform-Code": "ANDROID",
-    "Accept-Encoding": "gzip, deflate, br",
+    "X-App-Version": "18.2.3",
+    "Accept-Encoding": "gzip, deflate",
     "Connection": "keep-alive"
 }
 
@@ -188,7 +187,7 @@ def make_bms_request(method, url, max_retries=3, **kwargs):
             log("ERROR", f"Network exception on attempt {attempt}: {e}")
             if attempt < max_retries:
                 log("NET", "Sleeping for 3 seconds before retry...")
-                time.sleep(3)
+                time.sleep(5)
                 continue
     return None
 
@@ -352,7 +351,7 @@ def main():
         cycle_count += 1
         
         log("INFO", "⏳ Sleeping for 20 seconds before the next loop...")
-        time.sleep(21)
+        time.sleep(27)
         
     log("INFO", "🏁 Time limit reached (5h 55m). Gracefully shutting down to prevent runner force-kill.")
 

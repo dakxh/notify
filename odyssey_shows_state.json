@@ -1,12 +1,12 @@
 {
   "known_movies": [
-    "Jana Nayagan",
-    "Spider-Man: Brand New Day",
     "Srinivasa Mangapuram",
-    "The Odyssey",
     "Lenin",
+    "Spider-Man: Brand New Day",
+    "Chennai Love Story",
     "Dhamaal 4",
-    "Chennai Love Story"
+    "The Odyssey",
+    "Jana Nayagan"
   ],
   "known_sessions": {
     "252014": {
@@ -414,6 +414,24 @@
       "time": "08:45 AM",
       "screen": "SCREEN 4",
       "format": "HDR By Barco English"
+    },
+    "254038": {
+      "movie": "Srinivasa Mangapuram",
+      "date": "20260730",
+      "time": "05:15 PM",
+      "screen": "SCREEN 2",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202607301715"
+    },
+    "254076": {
+      "movie": "The Odyssey",
+      "date": "20260730",
+      "time": "02:05 PM",
+      "screen": "SCREEN 3",
+      "format": "2D English",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202607301405"
     }
   }
 }

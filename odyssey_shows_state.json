@@ -1,13 +1,13 @@
 {
   "known_movies": [
-    "Karmakhya",
-    "Chennai Love Story",
     "Dhamaal 4",
-    "Srinivasa Mangapuram",
-    "Jana Nayagan",
     "Spider-Man: Brand New Day",
+    "Karmakhya",
     "The Odyssey",
-    "Lenin"
+    "Srinivasa Mangapuram",
+    "Lenin",
+    "Chennai Love Story",
+    "Jana Nayagan"
   ],
   "known_sessions": {
     "252014": {

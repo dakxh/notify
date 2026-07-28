@@ -31,7 +31,8 @@ GET_HEADERS = {
     "X-Longitude": "78.48667",
     "X-Region-Code": "HYD",
     "X-Platform-Code": "ANDROID",
-    "Accept-Encoding": "gzip, deflate, br"
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive"
 }
 
 # --- VERBOSE LOGGING SYSTEM ---
@@ -335,7 +336,7 @@ def main():
         cycle_count += 1
         
         log("INFO", "⏳ Sleeping for 20 seconds before the next loop...")
-        time.sleep(19)
+        time.sleep(21)
         
     log("INFO", "🏁 Time limit reached (5h 55m). Gracefully shutting down to prevent runner force-kill.")
 

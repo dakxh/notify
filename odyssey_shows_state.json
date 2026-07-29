@@ -1,13 +1,13 @@
 {
   "known_movies": [
-    "Chennai Love Story",
+    "Karmakhya",
     "Jana Nayagan",
-    "Spider-Man: Brand New Day",
-    "The Odyssey",
-    "Dhamaal 4",
     "Lenin",
     "Srinivasa Mangapuram",
-    "Karmakhya"
+    "Chennai Love Story",
+    "Spider-Man: Brand New Day",
+    "The Odyssey",
+    "Dhamaal 4"
   ],
   "known_sessions": {
     "252014": {
@@ -775,6 +775,15 @@
       "format": "2D Telugu",
       "attribute": " ",
       "datetime": "202607301945"
+    },
+    "254080": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260731",
+      "time": "08:00 AM",
+      "screen": "SCREEN 2",
+      "format": "2D English",
+      "attribute": " ",
+      "datetime": "202607310800"
     }
   }
 }

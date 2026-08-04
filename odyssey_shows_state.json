@@ -1,1 +1,52 @@
-
+{
+  "known_movies": [
+    "Spider-Man: Brand New Day"
+  ],
+  "known_sessions": {
+    "253996": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "11:30 AM",
+      "screen": "SCREEN 6",
+      "format": "3D English",
+      "attribute": "PCX SCREEN",
+      "datetime": "202608071130"
+    },
+    "253997": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "02:25 PM",
+      "screen": "SCREEN 6",
+      "format": "3D English",
+      "attribute": "PCX SCREEN",
+      "datetime": "202608071425"
+    },
+    "254307": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "05:20 PM",
+      "screen": "SCREEN 6",
+      "format": "3D English",
+      "attribute": "PCX SCREEN",
+      "datetime": "202608071720"
+    },
+    "253999": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "08:15 PM",
+      "screen": "SCREEN 6",
+      "format": "3D English",
+      "attribute": "PCX SCREEN",
+      "datetime": "202608072015"
+    },
+    "254000": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "11:10 PM",
+      "screen": "SCREEN 6",
+      "format": "3D English",
+      "attribute": "PCX SCREEN",
+      "datetime": "202608072310"
+    }
+  }
+}

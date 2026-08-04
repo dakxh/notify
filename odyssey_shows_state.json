@@ -1,7 +1,7 @@
 {
   "known_movies": [
-    "Spider-Man: Brand New Day",
-    "The Odyssey"
+    "The Odyssey",
+    "Spider-Man: Brand New Day"
   ],
   "known_sessions": {
     "253996": {
@@ -93,6 +93,24 @@
       "format": "HDR By Barco English",
       "attribute": "PCX HDR by BARCO",
       "datetime": "202608072305"
+    },
+    "254424": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "08:00 AM",
+      "screen": "SCREEN 4",
+      "format": "HDR By Barco English",
+      "attribute": "PCX HDR by BARCO",
+      "datetime": "202608070800"
+    },
+    "254363": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "10:40 AM",
+      "screen": "SCREEN 4",
+      "format": "HDR By Barco English",
+      "attribute": "PCX HDR by BARCO",
+      "datetime": "202608071040"
     }
   }
 }

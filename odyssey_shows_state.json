@@ -1,10 +1,10 @@
 {
   "known_movies": [
-    "The Odyssey",
-    "Korean Kanakaraju",
-    "Chennai Love Story",
     "DC",
-    "Spider-Man: Brand New Day"
+    "Korean Kanakaraju",
+    "Spider-Man: Brand New Day",
+    "Chennai Love Story",
+    "The Odyssey"
   ],
   "known_sessions": {
     "253996": {
@@ -240,6 +240,15 @@
       "format": "2D Telugu",
       "attribute": " ",
       "datetime": "202608071100"
+    },
+    "254390": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "02:00 PM",
+      "screen": "SCREEN 3",
+      "format": "2D Tamil",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202608071400"
     }
   }
 }

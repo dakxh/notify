@@ -1,7 +1,9 @@
 {
   "known_movies": [
+    "Chennai Love Story",
     "The Odyssey",
-    "Spider-Man: Brand New Day"
+    "Spider-Man: Brand New Day",
+    "DC"
   ],
   "known_sessions": {
     "253996": {
@@ -111,6 +113,60 @@
       "format": "HDR By Barco English",
       "attribute": "PCX HDR by BARCO",
       "datetime": "202608071040"
+    },
+    "254387": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "08:30 AM",
+      "screen": "SCREEN 3",
+      "format": "2D Tamil",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202608070830"
+    },
+    "254388": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "11:15 AM",
+      "screen": "SCREEN 3",
+      "format": "2D Tamil",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202608071115"
+    },
+    "254392": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "08:05 PM",
+      "screen": "SCREEN 3",
+      "format": "2D Tamil",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202608072005"
+    },
+    "254395": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "11:25 PM",
+      "screen": "SCREEN 2",
+      "format": "2D Tamil",
+      "attribute": " ",
+      "datetime": "202608072325"
+    },
+    "254292": {
+      "movie": "Chennai Love Story",
+      "date": "20260807",
+      "time": "01:45 PM",
+      "screen": "SCREEN 1",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071345"
+    },
+    "254293": {
+      "movie": "Chennai Love Story",
+      "date": "20260807",
+      "time": "07:50 PM",
+      "screen": "SCREEN 1",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071950"
     }
   }
 }

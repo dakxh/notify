@@ -1,9 +1,10 @@
 {
   "known_movies": [
     "DC",
+    "Korean Kanakaraju",
+    "Spider-Man: Brand New Day",
     "Chennai Love Story",
-    "The Odyssey",
-    "Spider-Man: Brand New Day"
+    "The Odyssey"
   ],
   "known_sessions": {
     "253996": {
@@ -167,6 +168,78 @@
       "format": "2D Telugu",
       "attribute": " ",
       "datetime": "202608071950"
+    },
+    "254381": {
+      "movie": "Korean Kanakaraju",
+      "date": "20260807",
+      "time": "08:00 AM",
+      "screen": "SCREEN 2",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608070800"
+    },
+    "254382": {
+      "movie": "Korean Kanakaraju",
+      "date": "20260807",
+      "time": "11:05 AM",
+      "screen": "SCREEN 2",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071105"
+    },
+    "254383": {
+      "movie": "Korean Kanakaraju",
+      "date": "20260807",
+      "time": "02:10 PM",
+      "screen": "SCREEN 2",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071410"
+    },
+    "254384": {
+      "movie": "Korean Kanakaraju",
+      "date": "20260807",
+      "time": "05:15 PM",
+      "screen": "SCREEN 2",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071715"
+    },
+    "254385": {
+      "movie": "Korean Kanakaraju",
+      "date": "20260807",
+      "time": "08:20 PM",
+      "screen": "SCREEN 2",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608072020"
+    },
+    "254386": {
+      "movie": "Korean Kanakaraju",
+      "date": "20260807",
+      "time": "10:50 PM",
+      "screen": "SCREEN 3",
+      "format": "2D Telugu",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202608072250"
+    },
+    "254389": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "08:15 AM",
+      "screen": "SCREEN 1",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608070815"
+    },
+    "254391": {
+      "movie": "DC",
+      "date": "20260807",
+      "time": "11:00 AM",
+      "screen": "SCREEN 1",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071100"
     }
   }
 }

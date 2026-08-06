@@ -1,6 +1,8 @@
 {
   "known_movies": [
     "Korean Kanakaraju",
+    "GDN",
+    "KJQ (King Jackie Queen)",
     "Spider-Man: Brand New Day",
     "Anakapalli",
     "DC",
@@ -278,6 +280,42 @@
       "format": "2D Malayalam",
       "attribute": " ",
       "datetime": "202608071705"
+    },
+    "254365": {
+      "movie": "KJQ (King Jackie Queen)",
+      "date": "20260807",
+      "time": "10:55 AM",
+      "screen": "SCREEN 5",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071055"
+    },
+    "254465": {
+      "movie": "KJQ (King Jackie Queen)",
+      "date": "20260807",
+      "time": "06:30 PM",
+      "screen": "SCREEN 5",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608071830"
+    },
+    "254328": {
+      "movie": "KJQ (King Jackie Queen)",
+      "date": "20260807",
+      "time": "11:30 PM",
+      "screen": "SCREEN 5",
+      "format": "2D Telugu",
+      "attribute": " ",
+      "datetime": "202608072330"
+    },
+    "254464": {
+      "movie": "GDN",
+      "date": "20260807",
+      "time": "03:45 PM",
+      "screen": "SCREEN 5",
+      "format": "2D Tamil",
+      "attribute": " ",
+      "datetime": "202608071545"
     }
   }
 }

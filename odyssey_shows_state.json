@@ -1,15 +1,15 @@
 {
   "known_movies": [
-    "GDN",
-    "Anakapalli",
-    "DC",
-    "Ohh My Dog",
-    "Thudakkam",
-    "The Odyssey",
-    "Chennai Love Story",
     "KJQ (King Jackie Queen)",
+    "The Odyssey",
+    "GDN",
+    "Thudakkam",
+    "Ohh My Dog",
+    "Chennai Love Story",
     "Korean Kanakaraju",
-    "Spider-Man: Brand New Day"
+    "DC",
+    "Spider-Man: Brand New Day",
+    "Anakapalli"
   ],
   "known_sessions": {
     "253996": {
@@ -335,6 +335,15 @@
       "format": "2D Hindi",
       "attribute": " ",
       "datetime": "202608072045"
+    },
+    "254477": {
+      "movie": "Spider-Man: Brand New Day",
+      "date": "20260807",
+      "time": "04:45 PM",
+      "screen": "SCREEN 3",
+      "format": "3D English",
+      "attribute": "BARCO 4K LASER",
+      "datetime": "202608071645"
     }
   }
 }

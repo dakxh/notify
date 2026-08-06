@@ -1,14 +1,15 @@
 {
   "known_movies": [
-    "GDN",
-    "Anakapalli",
-    "DC",
-    "Thudakkam",
-    "The Odyssey",
-    "Chennai Love Story",
     "KJQ (King Jackie Queen)",
+    "The Odyssey",
+    "GDN",
+    "Thudakkam",
+    "Ohh My Dog",
+    "Chennai Love Story",
     "Korean Kanakaraju",
-    "Spider-Man: Brand New Day"
+    "DC",
+    "Spider-Man: Brand New Day",
+    "Anakapalli"
   ],
   "known_sessions": {
     "253996": {
@@ -316,6 +317,24 @@
       "format": "2D Tamil",
       "attribute": " ",
       "datetime": "202608071545"
+    },
+    "254473": {
+      "movie": "Ohh My Dog",
+      "date": "20260807",
+      "time": "01:10 PM",
+      "screen": "SCREEN 5",
+      "format": "2D Hindi",
+      "attribute": " ",
+      "datetime": "202608071310"
+    },
+    "254330": {
+      "movie": "Ohh My Dog",
+      "date": "20260807",
+      "time": "08:45 PM",
+      "screen": "SCREEN 5",
+      "format": "2D Hindi",
+      "attribute": " ",
+      "datetime": "202608072045"
     }
   }
 }
